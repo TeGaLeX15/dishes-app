@@ -1,15 +1,20 @@
 // pages/DishFormPage.tsx
 import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useCreateDish } from "../hooks/useDishMutations";
 import {
   dishSchema,
   type DishFormSchema,
 } from "../schemas/dish.schema";
+import type { DishFormValues } from "../types/dish";
 
 const DishFormPage = () => {
+  const navigate = useNavigate();
+  const createDishMutation = useCreateDish();
+
   const {
     register,
     handleSubmit,
@@ -27,7 +32,23 @@ const DishFormPage = () => {
   });
 
   const onSubmit = (data: DishFormSchema) => {
-    console.log(data);
+    const dish: DishFormValues = {
+      name: data.name,
+      ingredients: data.ingredients
+        .split(",")
+        .map((ingredient) => ingredient.trim())
+        .filter(Boolean),
+      image: data.image,
+      price: data.price,
+      cookingTime: data.cookingTime,
+      category: data.category,
+    };
+
+    createDishMutation.mutate(dish, {
+      onSuccess: () => {
+        navigate("/dishes");
+      },
+    });
   };
 
   return (
@@ -215,6 +236,18 @@ const DishFormPage = () => {
           </div>
         </div>
 
+        {createDishMutation.isError && (
+          <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4">
+            <p className="text-sm font-medium text-red-900">
+              Не удалось сохранить блюдо
+            </p>
+
+            <p className="mt-1 text-sm text-red-700">
+              Проверьте подключение к серверу и попробуйте снова.
+            </p>
+          </div>
+        )}
+
         <div className="mt-8 flex flex-col-reverse gap-3 border-t border-border pt-6 sm:flex-row sm:justify-end">
           <Link
             to="/dishes"
@@ -225,9 +258,12 @@ const DishFormPage = () => {
 
           <button
             type="submit"
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+            disabled={createDishMutation.isPending}
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Сохранить блюдо
+            {createDishMutation.isPending
+              ? "Сохранение..."
+              : "Сохранить блюдо"}
           </button>
         </div>
       </form>
