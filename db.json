@@ -2,7 +2,7 @@
   "dishes": [
     {
       "id": "1",
-      "name": "Паста Карбонара",
+      "name": "Паста Карбонара с пармезаном",
       "ingredients": [
         "Спагетти",
         "Бекон",
@@ -83,6 +83,5 @@
       "cookingTime": 50,
       "category": "Паста"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

@@ -3,7 +3,7 @@ import { api } from "../lib/axios";
 import type { Dish, DishFormValues } from "../types/dish";
 
 /**
- * Получает список всех блюд.
+ * Получение списка всех блюд
  */
 export const getDishes = async (): Promise<Dish[]> => {
   const response = await api.get<Dish[]>("/dishes");
@@ -12,7 +12,7 @@ export const getDishes = async (): Promise<Dish[]> => {
 };
 
 /**
- * Получает одно блюдо по ID.
+ * Получение одного блюдо по ID
  */
 export const getDish = async (id: string): Promise<Dish> => {
   const response = await api.get<Dish>(`/dishes/${id}`);
@@ -21,7 +21,7 @@ export const getDish = async (id: string): Promise<Dish> => {
 };
 
 /**
- * Создаёт новое блюдо.
+ * Создание нового блюда
  */
 export const createDish = async (data: DishFormValues): Promise<Dish> => {
   const response = await api.post<Dish>("/dishes", data);
@@ -30,7 +30,7 @@ export const createDish = async (data: DishFormValues): Promise<Dish> => {
 };
 
 /**
- * Обновляет существующее блюдо.
+ * Обновление существующего блюда
  */
 export const updateDish = async (
   id: string,
@@ -42,7 +42,7 @@ export const updateDish = async (
 };
 
 /**
- * Удаляет блюдо.
+ * Удаление блюда
  */
 export const deleteDish = async (id: string): Promise<void> => {
   await api.delete(`/dishes/${id}`);
