@@ -25,9 +25,7 @@ const DishesPage = () => {
       return [];
     }
 
-    return Array.from(
-      new Set(dishes.map((dish) => dish.category)),
-    );
+    return Array.from(new Set(dishes.map((dish) => dish.category)));
   }, [dishes]);
 
   const filteredDishes = useMemo(() => {
@@ -45,8 +43,7 @@ const DishesPage = () => {
           ingredient.toLowerCase().includes(normalizedSearch),
         );
 
-      const matchesCategory =
-        category === "Все" || dish.category === category;
+      const matchesCategory = category === "Все" || dish.category === category;
 
       return matchesSearch && matchesCategory;
     });
@@ -96,17 +93,13 @@ const DishesPage = () => {
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <header className="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="mb-2 text-sm font-medium text-primary">
-            Меню
-          </p>
+          <p className="mb-2 text-sm font-medium text-primary">Меню</p>
 
           <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Блюда
           </h1>
 
-          <p className="mt-2 text-muted">
-            Управляйте блюдами вашего меню
-          </p>
+          <p className="mt-2 text-muted">Управляйте блюдами вашего меню</p>
         </div>
 
         <Link
@@ -169,9 +162,7 @@ const DishesPage = () => {
 
       {filteredDishes.length === 0 ? (
         <div className="rounded-2xl border border-border bg-white p-10 text-center">
-          <h2 className="text-xl font-semibold">
-            Ничего не найдено
-          </h2>
+          <h2 className="text-xl font-semibold">Ничего не найдено</h2>
 
           <p className="mt-2 text-sm text-muted">
             Попробуйте изменить запрос или выбрать другую категорию.

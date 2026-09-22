@@ -23,9 +23,7 @@ export const getDish = async (id: string): Promise<Dish> => {
 /**
  * Создаёт новое блюдо.
  */
-export const createDish = async (
-  data: DishFormValues,
-): Promise<Dish> => {
+export const createDish = async (data: DishFormValues): Promise<Dish> => {
   const response = await api.post<Dish>("/dishes", data);
 
   return response.data;

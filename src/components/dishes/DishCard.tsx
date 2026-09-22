@@ -1,5 +1,6 @@
 // components/dishes/DishCard.tsx
 import { Clock3, Pencil, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import type { Dish } from "../../types/dish";
 
@@ -46,13 +47,13 @@ const DishCard = ({ dish }: DishCardProps) => {
           </span>
 
           <div className="flex gap-1">
-            <button
-              type="button"
+            <Link
+              to={`/dishes/${dish.id}/edit`}
               aria-label={`Редактировать ${dish.name}`}
               className="rounded-lg p-2 text-muted transition-colors hover:bg-slate-100 hover:text-foreground"
             >
               <Pencil size={17} />
-            </button>
+            </Link>
 
             <button
               type="button"

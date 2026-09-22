@@ -1,23 +1,39 @@
 // pages/DishFormPage.tsx
+import { useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useCreateDish } from "../hooks/useDishMutations";
-import {
-  dishSchema,
-  type DishFormSchema,
-} from "../schemas/dish.schema";
+import { getDish } from "../api/dishes";
+import { useCreateDish, useUpdateDish } from "../hooks/useDishMutations";
+import { dishSchema, type DishFormSchema } from "../schemas/dish.schema";
 import type { DishFormValues } from "../types/dish";
 
 const DishFormPage = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const isEditMode = Boolean(id);
+
   const createDishMutation = useCreateDish();
+  const updateDishMutation = useUpdateDish();
+
+  const {
+    data: dish,
+    isLoading: isDishLoading,
+    isError: isDishError,
+  } = useQuery({
+    queryKey: ["dish", id],
+    queryFn: () => getDish(id as string),
+    enabled: isEditMode,
+  });
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<DishFormSchema>({
     resolver: zodResolver(dishSchema),
@@ -31,8 +47,23 @@ const DishFormPage = () => {
     },
   });
 
+  useEffect(() => {
+    if (!dish) {
+      return;
+    }
+
+    reset({
+      name: dish.name,
+      ingredients: dish.ingredients.join(", "),
+      image: dish.image,
+      price: dish.price,
+      cookingTime: dish.cookingTime,
+      category: dish.category,
+    });
+  }, [dish, reset]);
+
   const onSubmit = (data: DishFormSchema) => {
-    const dish: DishFormValues = {
+    const dishData: DishFormValues = {
       name: data.name,
       ingredients: data.ingredients
         .split(",")
@@ -44,12 +75,65 @@ const DishFormPage = () => {
       category: data.category,
     };
 
-    createDishMutation.mutate(dish, {
+    if (isEditMode && id) {
+      updateDishMutation.mutate(
+        {
+          id,
+          data: dishData,
+        },
+        {
+          onSuccess: () => {
+            navigate("/dishes");
+          },
+        },
+      );
+
+      return;
+    }
+
+    createDishMutation.mutate(dishData, {
       onSuccess: () => {
         navigate("/dishes");
       },
     });
   };
+
+  const isPending =
+    createDishMutation.isPending || updateDishMutation.isPending;
+
+  const isMutationError =
+    createDishMutation.isError || updateDishMutation.isError;
+
+  if (isEditMode && isDishLoading) {
+    return (
+      <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+        <p className="text-sm text-muted">Загрузка блюда...</p>
+      </main>
+    );
+  }
+
+  if (isEditMode && isDishError) {
+    return (
+      <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-6">
+          <h1 className="text-lg font-semibold text-red-900">
+            Не удалось загрузить блюдо
+          </h1>
+
+          <p className="mt-1 text-sm text-red-700">
+            Проверьте подключение к серверу и попробуйте снова.
+          </p>
+
+          <Link
+            to="/dishes"
+            className="mt-4 inline-flex text-sm font-semibold text-red-700 hover:text-red-900"
+          >
+            Вернуться к блюдам
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
@@ -62,16 +146,16 @@ const DishFormPage = () => {
           Назад к блюдам
         </Link>
 
-        <p className="mb-2 text-sm font-medium text-primary">
-          Меню
-        </p>
+        <p className="mb-2 text-sm font-medium text-primary">Меню</p>
 
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Добавить блюдо
+          {isEditMode ? "Редактировать блюдо" : "Добавить блюдо"}
         </h1>
 
         <p className="mt-2 text-muted">
-          Заполните информацию о новом блюде
+          {isEditMode
+            ? "Измените информацию о блюде"
+            : "Заполните информацию о новом блюде"}
         </p>
       </div>
 
@@ -81,10 +165,7 @@ const DishFormPage = () => {
       >
         <div className="space-y-6">
           <div>
-            <label
-              htmlFor="name"
-              className="mb-2 block text-sm font-medium"
-            >
+            <label htmlFor="name" className="mb-2 block text-sm font-medium">
               Название
             </label>
 
@@ -97,9 +178,7 @@ const DishFormPage = () => {
             />
 
             {errors.name && (
-              <p className="mt-2 text-sm text-red-600">
-                {errors.name.message}
-              </p>
+              <p className="mt-2 text-sm text-red-600">{errors.name.message}</p>
             )}
           </div>
 
@@ -131,10 +210,7 @@ const DishFormPage = () => {
           </div>
 
           <div>
-            <label
-              htmlFor="image"
-              className="mb-2 block text-sm font-medium"
-            >
+            <label htmlFor="image" className="mb-2 block text-sm font-medium">
               Изображение
             </label>
 
@@ -155,10 +231,7 @@ const DishFormPage = () => {
 
           <div className="grid gap-6 sm:grid-cols-2">
             <div>
-              <label
-                htmlFor="price"
-                className="mb-2 block text-sm font-medium"
-              >
+              <label htmlFor="price" className="mb-2 block text-sm font-medium">
                 Цена, ₸
               </label>
 
@@ -236,7 +309,7 @@ const DishFormPage = () => {
           </div>
         </div>
 
-        {createDishMutation.isError && (
+        {isMutationError && (
           <div className="mt-6 rounded-xl border border-red-200 bg-red-50 p-4">
             <p className="text-sm font-medium text-red-900">
               Не удалось сохранить блюдо
@@ -258,12 +331,14 @@ const DishFormPage = () => {
 
           <button
             type="submit"
-            disabled={createDishMutation.isPending}
+            disabled={isPending}
             className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {createDishMutation.isPending
+            {isPending
               ? "Сохранение..."
-              : "Сохранить блюдо"}
+              : isEditMode
+                ? "Сохранить изменения"
+                : "Сохранить блюдо"}
           </button>
         </div>
       </form>
