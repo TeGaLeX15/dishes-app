@@ -17,6 +17,8 @@
 * Tailwind CSS 4.3.3
 * Lucide React 1.47.0
 * JSON Server 1.0.0-beta.15
+* Vitest 5.0.1
+* Testing Library
 
 ## Возможности
 
@@ -32,6 +34,7 @@
 * Пустое состояние списка
 * Адаптивная верстка
 * Mock API на базе JSON Server
+* Тестирование схем валидации, API-слоя и UI-компонентов
 
 ## Архитектура
 
@@ -45,6 +48,7 @@ src/
 ├── lib/          # Axios и QueryClient
 ├── pages/        # Страницы приложения
 ├── schemas/      # Zod-схемы валидации
+├── tests/        # Тесты
 ├── types/        # TypeScript-типы
 ├── index.css     # Глобальные стили
 ├── main.tsx      # Точка входа
