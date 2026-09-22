@@ -120,6 +120,18 @@ npm run lint
 Проверка проекта ESLint.
 
 ```bash
+npm test
+```
+
+Запуск тестов Vitest в watch-режиме.
+
+```bash
+npx vitest run
+```
+
+Однократный запуск всех тестов без watch-режима.
+
+```bash
 npm run preview
 ```
 
