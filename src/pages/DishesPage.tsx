@@ -15,6 +15,7 @@ const DishesPage = () => {
     data: dishes,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["dishes"],
     queryFn: getDishes,
@@ -68,6 +69,14 @@ const DishesPage = () => {
           <p className="mt-1 text-sm text-red-700">
             Проверьте подключение к серверу и попробуйте снова.
           </p>
+
+          <button
+            type="button"
+            onClick={() => refetch()}
+            className="mt-4 inline-flex h-10 items-center justify-center rounded-lg bg-red-600 px-4 text-sm font-semibold text-white transition-colors hover:bg-red-700"
+          >
+            Повторить
+          </button>
         </div>
       </main>
     );

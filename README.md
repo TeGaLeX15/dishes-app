@@ -1,75 +1,156 @@
-# React + TypeScript + Vite
+# Dishes App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Небольшое веб-приложение для управления меню блюд.
 
-Currently, two official plugins are available:
+Приложение позволяет просматривать блюда, искать их по названию и ингредиентам, фильтровать по категориям, а также создавать, редактировать и удалять блюда.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Стек
 
-## React Compiler
+* React 19.3.0
+* TypeScript 6.0.3
+* Vite 8.3.0
+* React Router 7.18.4 - Data Mode
+* TanStack Query 5.103.2
+* Axios 1.20.0
+* React Hook Form 7.88.0
+* Zod 4.6.5
+* Tailwind CSS 4.3.3
+* Lucide React 1.47.0
+* JSON Server 1.0.0-beta.15
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Возможности
 
-## Expanding the ESLint configuration
+* Просмотр списка блюд
+* Поиск по названию и ингредиентам
+* Фильтрация по категориям
+* Создание блюда
+* Редактирование блюда
+* Удаление блюда с подтверждением
+* Валидация формы
+* Состояния загрузки и ошибок
+* Обработка ошибок API
+* Пустое состояние списка
+* Адаптивная верстка
+* Mock API на базе JSON Server
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Архитектура
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Проект разделён по ответственности:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```text
+src/
+├── api/          # API-запросы
+├── components/   # UI-компоненты
+├── hooks/        # TanStack Query mutations
+├── lib/          # Axios и QueryClient
+├── pages/        # Страницы приложения
+├── schemas/      # Zod-схемы валидации
+├── types/        # TypeScript-типы
+├── index.css     # Глобальные стили
+├── main.tsx      # Точка входа
+└── router.tsx    # Маршрутизация
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Логика работы с API отделена от UI, а серверное состояние управляется через TanStack Query.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Запуск проекта
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Установка зависимостей
 
+```bash
+npm install
 ```
+
+### 2. Запуск Mock API
+
+В отдельном терминале:
+
+```bash
+npm run server
+```
+
+JSON Server будет доступен по адресу:
+
+```text
+http://localhost:3001
+```
+
+### 3. Запуск приложения
+
+В другом терминале:
+
+```bash
+npm run dev
+```
+
+После запуска приложение будет доступно по адресу:
+
+```text
+http://localhost:5173
+```
+
+## Доступные команды
+
+```bash
+npm run dev
+```
+
+Запуск frontend в режиме разработки.
+
+```bash
+npm run server
+```
+
+Запуск Mock API через JSON Server.
+
+```bash
+npm run build
+```
+
+Проверка TypeScript и production-сборка.
+
+```bash
+npm run lint
+```
+
+Проверка проекта ESLint.
+
+```bash
+npm run preview
+```
+
+Предпросмотр production-сборки.
+
+## Mock data
+
+Начальные данные находятся в:
+
+```text
+db.json
+```
+
+JSON Server использует этот файл как Mock-базу данных.
+
+## API
+
+Основной ресурс:
+
+```text
+GET    /dishes
+GET    /dishes/:id
+POST   /dishes
+PATCH  /dishes/:id
+DELETE /dishes/:id
+```
+
+API-слой находится в:
+
+```text
+src/api/dishes.ts
+```
+
+## Примечание
+
+Изображения блюд в демонстрационных данных используют внешние URL.
+
+Проект создан как тестовое frontend-задание с акцентом на понятную структуру, типизацию, разделение ответственности и обработку пользовательских и API-состояний.
