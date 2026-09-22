@@ -1,0 +1,87 @@
+{
+  "dishes": [
+    {
+      "id": "1",
+      "name": "Паста Карбонара",
+      "ingredients": [
+        "Спагетти",
+        "Бекон",
+        "Яйцо",
+        "Пармезан"
+      ],
+      "image": "https://images.unsplash.com/photo-1473093295043-cdd812d0e601",
+      "price": 2500,
+      "cookingTime": 25,
+      "category": "Паста"
+    },
+    {
+      "id": "2",
+      "name": "Маргарита",
+      "ingredients": [
+        "Томатный соус",
+        "Моцарелла",
+        "Базилик"
+      ],
+      "image": "https://images.unsplash.com/photo-1574071318508-1cdbab80d002",
+      "price": 2200,
+      "cookingTime": 20,
+      "category": "Пицца"
+    },
+    {
+      "id": "3",
+      "name": "Цезарь с курицей",
+      "ingredients": [
+        "Курица",
+        "Салат ромэн",
+        "Пармезан",
+        "Сухарики"
+      ],
+      "image": "https://images.unsplash.com/photo-1550304943-4f24f54ddde9",
+      "price": 2800,
+      "cookingTime": 15,
+      "category": "Салаты"
+    },
+    {
+      "id": "4",
+      "name": "Том Ям",
+      "ingredients": [
+        "Креветки",
+        "Грибы",
+        "Кокосовое молоко",
+        "Лемонграсс"
+      ],
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554",
+      "price": 3200,
+      "cookingTime": 30,
+      "category": "Супы"
+    },
+    {
+      "id": "5",
+      "name": "Чизкейк",
+      "ingredients": [
+        "Сливочный сыр",
+        "Печенье",
+        "Сливки",
+        "Ягоды"
+      ],
+      "image": "https://images.unsplash.com/photo-1565958011703-44f9829ba187",
+      "price": 1900,
+      "cookingTime": 45,
+      "category": "Десерты"
+    },
+    {
+      "id": "6",
+      "name": "Лазанья",
+      "ingredients": [
+        "Листы лазаньи",
+        "Говядина",
+        "Томатный соус",
+        "Бешамель"
+      ],
+      "image": "https://images.unsplash.com/photo-1574894709920-11b28e7367e3",
+      "price": 2900,
+      "cookingTime": 50,
+      "category": "Паста"
+    }
+  ]
+}
