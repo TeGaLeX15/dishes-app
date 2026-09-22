@@ -2,6 +2,7 @@
 import { Clock3, Pencil, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
+import { useDeleteDish } from "../../hooks/useDishMutations";
 import type { Dish } from "../../types/dish";
 
 interface DishCardProps {
@@ -9,6 +10,18 @@ interface DishCardProps {
 }
 
 const DishCard = ({ dish }: DishCardProps) => {
+  const deleteDishMutation = useDeleteDish();
+
+  const handleDelete = () => {
+    const confirmed = window.confirm(`Удалить блюдо «${dish.name}»?`);
+
+    if (!confirmed) {
+      return;
+    }
+
+    deleteDishMutation.mutate(dish.id);
+  };
+
   return (
     <article className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition-shadow hover:shadow-md">
       <div className="aspect-[16/10] overflow-hidden bg-slate-100">
@@ -57,13 +70,21 @@ const DishCard = ({ dish }: DishCardProps) => {
 
             <button
               type="button"
+              onClick={handleDelete}
+              disabled={deleteDishMutation.isPending}
               aria-label={`Удалить ${dish.name}`}
-              className="rounded-lg p-2 text-muted transition-colors hover:bg-red-50 hover:text-red-600"
+              className="rounded-lg p-2 text-muted transition-colors hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Trash2 size={17} />
             </button>
           </div>
         </div>
+
+        {deleteDishMutation.isError && (
+          <p className="mt-3 text-sm text-red-600">
+            Не удалось удалить блюдо. Попробуйте снова.
+          </p>
+        )}
       </div>
     </article>
   );

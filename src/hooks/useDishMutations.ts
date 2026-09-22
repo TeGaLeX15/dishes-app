@@ -1,7 +1,7 @@
 // hooks/useDishMutations.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { createDish, updateDish } from "../api/dishes";
+import { createDish, updateDish, deleteDish } from "../api/dishes";
 import type { DishFormValues } from "../types/dish";
 
 export const useCreateDish = () => {
@@ -32,6 +32,20 @@ export const useUpdateDish = () => {
 
       queryClient.invalidateQueries({
         queryKey: ["dish", variables.id],
+      });
+    },
+  });
+};
+
+export const useDeleteDish = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteDish(id),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["dishes"],
       });
     },
   });

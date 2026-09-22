@@ -82,20 +82,6 @@
       "price": 2900,
       "cookingTime": 50,
       "category": "Паста"
-    },
-    {
-      "name": "Бургер",
-      "ingredients": [
-        "Булочка",
-        "Говядина",
-        "Сыр",
-        "Соус"
-      ],
-      "image": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd",
-      "price": 2400,
-      "cookingTime": 20,
-      "category": "Десерты",
-      "id": "tWTAeaYZR2w"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
